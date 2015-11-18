@@ -27,11 +27,13 @@ dependencies {
        compile 'io.netty:netty-transport-native-epoll:4.1.0.Beta6'
 }
 
+
+
 sourceSets {
 	main {
 		java {
-			srcDir 'src/main/java' 
-			srcDir 'proxy-api-src'
+			srcDir 'example_src/main/java' 
+			srcDir 'src'
 		}
 	}
 }

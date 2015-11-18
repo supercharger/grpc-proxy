@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="src" path="proxy-api-src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="example_src/main/java"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="output" path="bin"/>
 	<classpathentry sourcepath="/Users/ivy4385/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-all/0.9.0/5c66dc4b881a4143ee8089cefda0f81267298d80/grpc-all-0.9.0-sources.jar" kind="lib" path="/Users/ivy4385/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-all/0.9.0/bb7d41b24eea7a1b77ba2fc2bb9d984250da4805/grpc-all-0.9.0.jar"/>
 	<classpathentry sourcepath="/Users/ivy4385/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/18.0/ad97fe8faaf01a3d3faacecd58e8fa6e78a973ca/guava-18.0-sources.jar" kind="lib" path="/Users/ivy4385/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/18.0/cce0823396aa693798f8882e64213b1772032b09/guava-18.0.jar"/>

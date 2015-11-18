@@ -14,6 +14,7 @@ public class RequestMarshaller implements Marshaller<Object[]>{
 
 	@Override
 	public InputStream stream(Object[] values) {
+		//TODO: For simplicity, used java serialization. need to change to protobuf
 		ByteArrayOutputStream outputstream = new ByteArrayOutputStream();
 		try {
 			ObjectOutputStream stream = new ObjectOutputStream(outputstream);
@@ -29,6 +30,7 @@ public class RequestMarshaller implements Marshaller<Object[]>{
 
 	@Override
 	public Object[] parse(InputStream stream) {
+		//TODO: For simplicity, used java serialization. need to change to protobuf
 		Object[] values = null;
 		try {
 			ObjectInputStream objstream = new ObjectInputStream(stream);
