@@ -8,36 +8,39 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import io.grpc.MethodDescriptor.Marshaller;
+import io.grpc.examples.experimental.proxy.HelloResponse;
+import io.protostuff.LinkedBuffer;
+import io.protostuff.ProtobufIOUtil;
+import io.protostuff.Schema;
+import io.protostuff.runtime.RuntimeSchema;
 
 public class ResponseMarshaller implements Marshaller<Object> {
 
 	@Override
 	public InputStream stream(Object value) {
-		//TODO: For simplicity, used java serialization. need to change to protobuf
 		ByteArrayOutputStream outputstream = new ByteArrayOutputStream();
+		Schema objSchema = RuntimeSchema.getSchema(value.getClass());
+		LinkedBuffer writeBuffer1 = LinkedBuffer.allocate(1000000);
 		try {
-			ObjectOutputStream stream = new ObjectOutputStream(outputstream);
-			stream.writeObject(value);
-		} catch (IOException e1) {
-			e1.printStackTrace();
+			ProtobufIOUtil.writeTo(outputstream, value, objSchema, writeBuffer1);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 		byte[] arr = outputstream.toByteArray();
 		InputStream messageIs = new ByteArrayInputStream(arr);
-		
 		return messageIs;
 	}
 
 	@Override
 	public Object parse(InputStream stream) {
-		//TODO: For simplicity, used java serialization. need to change to protobuf
-		Object value = null;
+		Schema<HelloResponse> respSchema = RuntimeSchema.getSchema(HelloResponse.class);
+		HelloResponse helloResponse = respSchema.newMessage();
 		try {
-			ObjectInputStream objstream = new ObjectInputStream(stream);
-			value  = (Object) objstream.readObject();
+			ProtobufIOUtil.mergeFrom(stream, helloResponse, respSchema);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return value;
+		return helloResponse;
 	}
 
 	

@@ -7,7 +7,9 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.ServerServiceDefinition;
 import io.grpc.examples.experimental.proxy.JavaProxyClient;
-import io.grpc.proxy.RequestMarshaller;
+import io.grpc.proxy.MessageTransfer;
+import io.grpc.proxy.MsgTransReqMarshaller;
+import io.grpc.proxy.ProtoStuffReqMsgTransMarshaller;
 import io.grpc.proxy.ResponseMarshaller;
 import io.grpc.proxy.annotation.GrpcMethod;
 import io.grpc.proxy.annotation.GrpcService;
@@ -23,7 +25,6 @@ public class ProxyServerBuilder {
 	private final int port;
 	private final List<Object> serviceList;
 	private final Server server;
-	private final static Marshaller<Object[]> REQUEST_MARSHALLER  = new RequestMarshaller();
 	private final static Marshaller<Object> RESPONSE_MARSHALLER = new ResponseMarshaller();
 	
 	public static class Builder {
@@ -73,9 +74,12 @@ public class ProxyServerBuilder {
 			Collection<Method> findAnnotatedMethods = ReflectionHelper.findAnnotatedMethods(serviceToInvoke.getClass(), GrpcMethod.class);
 			for(Method exposedMethod : findAnnotatedMethods) {
 				final String methodName = serviceInterfaceName+ "/" + exposedMethod.getName();
-				MethodDescriptor<Object[], Object> methodDescriptor = MethodDescriptor
+				MsgTransReqMarshaller msgTransReqMarshaller  = 
+						new MsgTransReqMarshaller(exposedMethod.getParameterTypes());
+				
+				MethodDescriptor<MessageTransfer, Object> methodDescriptor = MethodDescriptor
 						.create(MethodType.UNARY, methodName,
-								REQUEST_MARSHALLER,
+								msgTransReqMarshaller,
 								RESPONSE_MARSHALLER);
 				
 				MethodInvocation methodInvokation = new MethodInvocation(serviceToInvoke, exposedMethod);

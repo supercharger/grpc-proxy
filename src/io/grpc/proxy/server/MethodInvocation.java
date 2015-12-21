@@ -2,11 +2,12 @@ package io.grpc.proxy.server;
 
 import java.lang.reflect.Method;
 
+import io.grpc.proxy.MessageTransfer;
 import io.grpc.stub.ServerCalls.UnaryMethod;
 import io.grpc.stub.StreamObserver;
 
 
-public class MethodInvocation implements UnaryMethod<Object[],Object> {
+public class MethodInvocation implements UnaryMethod<MessageTransfer,Object> {
 	private final Object serviceToInvoke;
 	private final Method method;
 	
@@ -16,19 +17,21 @@ public class MethodInvocation implements UnaryMethod<Object[],Object> {
 	}
 
 	@Override
-	public  void invoke(Object[] request, StreamObserver<Object> responseObserver) {
-		if (method.getParameterTypes().length != request.length ) {
+	public  void invoke(MessageTransfer request, StreamObserver<Object> responseObserver) {
+		if (method.getParameterTypes().length != request.getLength()) {
 			return;
 		}
 		try {
-			Object returnObj = method.invoke(serviceToInvoke, request);
+			Object[] requestParams  = request.retriveRequestParams();
+			Object returnObj = method.invoke(serviceToInvoke, requestParams);
 			responseObserver.onNext(returnObj);
 		} catch(Exception ex) {
 			responseObserver.onError(ex);
-			ex.printStackTrace();
 		} finally {
 			responseObserver.onCompleted();
 		}
 	}
+
+	
 
 }
