@@ -1,4 +1,9 @@
-grpc Proxy Example
+
+
+
+Grpc With Java Proxy instead of generating stubs, without restriction of single method param and cross language RPC
+
+Build
 ==============================================
 
 To build the Grpc Proxy Example, run in this directory:
